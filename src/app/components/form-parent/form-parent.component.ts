@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, FormControl, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 
 
@@ -21,7 +21,7 @@ export class Step {
 })
 export class FormParentComponent implements OnInit, OnChanges {
 
- stepsCounter: number[] = [0];
+ //stepsCounter: number[] = [0];
  funnelForm: FormGroup;
  @Input() funnel: any;
 
@@ -46,21 +46,22 @@ export class FormParentComponent implements OnInit, OnChanges {
       /* this.filteredOptions = this.myControl.valueChanges
       .startWith(null)
       .map(val => val ? this.filter(val) : this.options.slice());*/
+     
   }
 
   createForm(): void {
     this.funnelForm = this.fb.group({
-      steps: this.fb.array([])
+      steps: this.fb.array([this.fb.group({ name: '', event: '' })])
     });
   }
 
   ngOnChanges() {
-    console.log('ngOnChanges');
-    this.setSteps(this.funnel.steps);
+    console.log('Parent - ngOnChanges');
+    //this.setSteps(this.funnel.steps);
   }
 
   get steps(): FormArray {
-    console.log('Parent: get steps()');
+    //console.log('Parent: get steps()');
     return this.funnelForm.get('steps') as FormArray;
   }
 
@@ -73,8 +74,10 @@ export class FormParentComponent implements OnInit, OnChanges {
 
   addStep(): void {
     //this.stepsCounter.push(this.stepsCounter.length);
-    this.steps.push(this.fb.group(new Step('Step ' + (this.steps.length+1) )));
-    //this.steps.push(this.fb.group(this.teste));
+    //this.steps.push(this.fb.group(new Step('Step ' + (this.steps.length+1) )));
+    let ind = this.steps.length;
+
+    this.steps.push(this.fb.group({name: '', event: ''}));
   }
 
   removeStep(index: number): void {

@@ -14,17 +14,17 @@
     <md-option *ngFor="let user of filteredUsers | async" [value]="user"> {{user.name}} </md-option>
 </md-autocomplete>
 -->
+
 <div [formGroup]="childGroup">
     <md-input-container>
-        <input type="text" mdInput formControlName="name" placeholder="Step Name" name="name">
+        <input type="text" mdInput formControlName="name" placeholder="Step Name">
     </md-input-container>
     <br />
     <md-input-container>
-        <input type="text" mdInput formControlName="event" placeholder="Event Name" [mdAutocomplete]="auto" name="event">
+        <input type="text" mdInput formControlName="event" placeholder="Event Name" [mdAutocomplete]="auto">
     </md-input-container>
     <md-autocomplete #auto="mdAutocomplete">
         <md-option *ngFor="let option of filteredOptions | async" [value]="option"> {{option}} </md-option>
     </md-autocomplete>
-
     <button md-button color="warn" type="button" (click)="removeStep(i)">Delete</button>
 </div>

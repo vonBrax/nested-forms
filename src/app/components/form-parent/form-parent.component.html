@@ -13,7 +13,10 @@
 
         <div *ngFor="let step of steps.controls; let i=index">
             <h4>Step #{{i + 1}}</h4>
-            <app-form-child [formGroupName]="i"> </app-form-child>
+            <!-- <app-form-child [formGroupName]="i"> </app-form-child> -->
+            <app-form-child [formControlName]="i"></app-form-child>
+            <!-- <app-form-child [childGroup]="funnelForm.get('steps')"></app-form-child>-->
+
 
             <!-- <md-input-container>
                 <input type="text" mdInput formControlName="name" placeholder="Step Name">

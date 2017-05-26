@@ -14,15 +14,15 @@ import { FormBuilder, FormGroup, ControlValueAccessor, NG_VALUE_ACCESSOR } from 
   }
 }*/
 
-export class Step {
+/*export class Step {
   name: string;
   event: string;
 
   constructor(name?: string, event?: string) {
-    this.name = name || '';
-    this.event = event || '';
+    this.name = new FormControl(name);
+    this.event = new FormControl(event);
   }
-}
+}*/
 
 @Component({
   selector: 'app-form-child',
@@ -31,15 +31,14 @@ export class Step {
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef( () => FormChildComponent),
+      useExisting: FormChildComponent,
       multi: true
     }
   ]
 })
 export class FormChildComponent implements OnInit, ControlValueAccessor {
 
-childGroup: FormGroup;
-
+@Input() childGroup: FormGroup;
   /*myControl = new FormControl();
   myControl2 = new FormControl();
 
@@ -60,13 +59,41 @@ childGroup: FormGroup;
   filteredUsers: Observable<User[]>;*/
 
   constructor(private fb: FormBuilder ) {
-    this.createForm();
+
+    this.childGroup = fb.group({
+      name: '',
+      event: ''
+    });
    }
 
-  createForm(): void {
-    this.childGroup = this.fb.group({name: 'Test', event: 'Test'});
+   writeValue(value: any) {
+    console.log('Child - Write Value');
+    if(value) {
+      this.childGroup.setValue(value);
+    }
   }
 
+  registerOnChange(fn: (value: any) => {} ) {
+    console.log('Child - registerOnChange');
+    this.childGroup.valueChanges.subscribe(fn);
+  }
+
+  registerOnTouched() {}
+
+   /*registerOnChange(fn) {
+    console.log('Child - RegisterOnChange');
+    this.propagateChange = fn;
+  }
+
+  propagateChange = (_: any) => {};*/
+
+  /*createFormGroup(): void {
+    this.childGroup = this.fb.group({
+      name: new FormControl(),
+      event: new FormControl()
+    });
+  }
+*/
  /* setSteps(steps: Step[]): void {
     const stepFormGroup = steps.map(step => this.fb.group(step));
     const stepFormArray = this.fb.array(stepFormGroup);
@@ -74,25 +101,23 @@ childGroup: FormGroup;
   }*/
 
 
-  writeValue(value: any) {
-    console.log('Child - Write Value');
-    this.childGroup.setValue(value);
-  }
+  
 
  /* registerOnChange(fn: (value: any) => void) {
     console.log('Child -Register on changes');
     this.childGroup.valueChanges.subscribe(fn);
   }*/
 
-  registerOnChange(fn) {
+ /* registerOnChange(fn) {
     this.propagateChange = fn;
   }
 
   propagateChange = (_: any) => {};
 
-  registerOnTouched() {}
+  registerOnTouched() {}*/
 
-  get name() {
+
+/*  get name() {
     console.log('Child: get name()');
     return this.childGroup.get('name');
   }
@@ -112,7 +137,7 @@ childGroup: FormGroup;
     console.log('Child: set event()');
     this.childGroup.patchValue({event: value});
     this.propagateChange(this.childGroup);
-  }
+  }*/
 
   ngOnInit() {
   }
