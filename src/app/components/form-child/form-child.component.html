@@ -1,0 +1,30 @@
+<!--<md-input-container>
+    <input type="text" mdInput [formControl]="myControl" [mdAutocomplete]="auto" placeholder="Event">
+</md-input-container>
+<md-autocomplete #auto="mdAutocomplete">
+    <md-option *ngFor="let option of filteredOptions | async" [value]="option"> {{option}} </md-option>
+</md-autocomplete>-->
+
+<!--TODOS: FINISH IMPLEMENTATION OF DIFFERENT CONTROL AND DISPLAY VALUES
+<md-input-container>
+    <input type="text" mdInput [formControl]="myControl2" [mdAutocomplete]="auto2">
+</md-input-container>
+
+<md-autocomplete #auto2="mdAutocomplete" [displayWith]="displayFn">
+    <md-option *ngFor="let user of filteredUsers | async" [value]="user"> {{user.name}} </md-option>
+</md-autocomplete>
+-->
+<div [formGroup]="childGroup">
+    <md-input-container>
+        <input type="text" mdInput formControlName="name" placeholder="Step Name" name="name">
+    </md-input-container>
+    <br />
+    <md-input-container>
+        <input type="text" mdInput formControlName="event" placeholder="Event Name" [mdAutocomplete]="auto" name="event">
+    </md-input-container>
+    <md-autocomplete #auto="mdAutocomplete">
+        <md-option *ngFor="let option of filteredOptions | async" [value]="option"> {{option}} </md-option>
+    </md-autocomplete>
+
+    <button md-button color="warn" type="button" (click)="removeStep(i)">Delete</button>
+</div>

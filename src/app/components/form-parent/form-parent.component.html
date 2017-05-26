@@ -1,0 +1,56 @@
+<form [formGroup]="funnelForm" (ngSubmit)="onSubmit()" novalidate>
+
+    <!--<div *ngFor="let step of stepsCounter;let i = index;">
+        <md-input-container>
+            <input type="text" mdInput placeholder="Step Name" [value]="i">
+        </md-input-container>
+        <br />
+        <app-form-child></app-form-child>
+        <button md-button color="warn" type="button" (click)="removeStep(i)">Remove</button>
+    </div>-->
+
+    <div formArrayName="steps">
+
+        <div *ngFor="let step of steps.controls; let i=index">
+            <h4>Step #{{i + 1}}</h4>
+            <app-form-child [formGroupName]="i"> </app-form-child>
+
+            <!-- <md-input-container>
+                <input type="text" mdInput formControlName="name" placeholder="Step Name">
+            </md-input-container>
+            <br />
+            <md-input-container>
+                <input type="text" mdInput formControlName="event" placeholder="Event Name" [mdAutocomplete]="i">
+            </md-input-container>
+            <md-autocomplete #i="mdAutocomplete">
+              <md-option *ngFor="let option of filteredOptions | async" [value]="option"> {{option}} </md-option>
+          </md-autocomplete>
+    
+            <button md-button color="warn" type="button" (click)="removeStep(i)">Delete</button>-->
+
+
+        </div>
+    </div>
+
+    <!--<div formArrayName="steps">
+        <div *ngFor="let step of steps.controls; let i=index" [formGroupName]="i">
+            <h4>Step #{{i + 1}}</h4>
+
+            <label>Step Name
+        <input type="text" formControlName="name" placeholder="Step Name">
+        </label>
+            <label>Event Name
+          <input type="text" formControlName="event">
+        </label>
+
+
+            <button type="button" (click)="removeStep(i)">Delete</button>
+        </div>
+    </div>-->
+
+    <br />
+    <button md-raised-button color="primary" type="button" (click)="addStep()">Add Step</button>
+</form>
+
+<p>funnelForm value: {{ funnelForm.value | json }}</p>
+<p> Step Change Log: {{ stepChangeLog | json}} </p>
