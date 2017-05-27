@@ -2,8 +2,6 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormControl, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 
-
-
 export class Step {
   name: string;
   event: string;
@@ -20,20 +18,9 @@ export class Step {
   styleUrls: ['./form-parent.component.css']
 })
 export class FormParentComponent implements OnInit, OnChanges {
-
  //stepsCounter: number[] = [0];
  funnelForm: FormGroup;
  @Input() funnel: any;
-
- options = [
-    'One',
-    'Two',
-    'Three',
-    'Four',
-    'Five',
-    'Six'
-  ];
-  filteredOptions: Observable<string[]>;
 
   stepChangeLog = [];
 
@@ -42,22 +29,17 @@ export class FormParentComponent implements OnInit, OnChanges {
     this.logStepChanges();
   }
 
-  ngOnInit() {
-      /* this.filteredOptions = this.myControl.valueChanges
-      .startWith(null)
-      .map(val => val ? this.filter(val) : this.options.slice());*/
-     
-  }
+  ngOnInit() { }
 
   createForm(): void {
     this.funnelForm = this.fb.group({
-      steps: this.fb.array([this.fb.group({ name: '', event: '' })])
+      steps: this.fb.array([])
     });
   }
 
   ngOnChanges() {
     console.log('Parent - ngOnChanges');
-    //this.setSteps(this.funnel.steps);
+    this.setSteps(this.funnel.step);
   }
 
   get steps(): FormArray {
@@ -75,9 +57,8 @@ export class FormParentComponent implements OnInit, OnChanges {
   addStep(): void {
     //this.stepsCounter.push(this.stepsCounter.length);
     //this.steps.push(this.fb.group(new Step('Step ' + (this.steps.length+1) )));
-    let ind = this.steps.length;
-
-    this.steps.push(this.fb.group({name: '', event: ''}));
+    //this.steps.push(this.fb.group({name: '', event: ''}));
+    this.steps.push( this.fb.control({name: '', event: ''}) );
   }
 
   removeStep(index: number): void {
@@ -99,12 +80,3 @@ export class FormParentComponent implements OnInit, OnChanges {
   }
 
 }
-/*
-let formModel = new FormGroup({
-  step: stepModel
-})
-
-let stepModel = new FormGroup({
-  stepName: new FormControl(),
-  stepEvent: new FormControl()
-});*/

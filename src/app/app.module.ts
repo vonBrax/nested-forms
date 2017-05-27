@@ -10,7 +10,9 @@ import 'hammerjs';
 import { 
   MdAutocompleteModule,
   MdInputModule,
-  MdButtonModule } from '@angular/material';
+  MdButtonModule,
+  MdCardModule,
+  MdSelectModule } from '@angular/material';
 
 
 import { AppComponent } from './app.component';
@@ -31,7 +33,9 @@ import { FormChildComponent } from './components/form-child/form-child.component
     BrowserAnimationsModule,
     MdAutocompleteModule,
     MdInputModule,
-    MdButtonModule
+    MdButtonModule,
+    MdCardModule,
+    MdSelectModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,30 +1,38 @@
-<!--<md-input-container>
-    <input type="text" mdInput [formControl]="myControl" [mdAutocomplete]="auto" placeholder="Event">
-</md-input-container>
-<md-autocomplete #auto="mdAutocomplete">
-    <md-option *ngFor="let option of filteredOptions | async" [value]="option"> {{option}} </md-option>
-</md-autocomplete>-->
-
-<!--TODOS: FINISH IMPLEMENTATION OF DIFFERENT CONTROL AND DISPLAY VALUES
-<md-input-container>
-    <input type="text" mdInput [formControl]="myControl2" [mdAutocomplete]="auto2">
-</md-input-container>
-
-<md-autocomplete #auto2="mdAutocomplete" [displayWith]="displayFn">
-    <md-option *ngFor="let user of filteredUsers | async" [value]="user"> {{user.name}} </md-option>
-</md-autocomplete>
--->
-
 <div [formGroup]="childGroup">
-    <md-input-container>
-        <input type="text" mdInput formControlName="name" placeholder="Step Name">
-    </md-input-container>
-    <br />
-    <md-input-container>
-        <input type="text" mdInput formControlName="event" placeholder="Event Name" [mdAutocomplete]="auto">
-    </md-input-container>
-    <md-autocomplete #auto="mdAutocomplete">
-        <md-option *ngFor="let option of filteredOptions | async" [value]="option"> {{option}} </md-option>
+    <md-card-subtitle>
+        <md-input-container>
+            <input type="text" mdInput formControlName="name" placeholder="Step Name">
+        </md-input-container>
+    </md-card-subtitle>
+
+    <md-card-content>
+        <md-input-container>
+            <input type="text" mdInput formControlName="event" placeholder="Event Name" [mdAutocomplete]="eventOpt">
+        </md-input-container>
+        <span *ngIf="viewProperties">
+                <md-input-container>
+                    <input type="text" mdInput formControlName="properties" placeholder="Properties" [mdAutocomplete]="propOpt">
+                </md-input-container>
+                <span *ngIf="propertySelected">
+                    <md-select formControlName="actions" placeholder="" floatPlaceholder="never">
+                        <md-option *ngFor="let query of queryParams" [value]="query">{{query}}</md-option>
+                    </md-select>
+                    <md-input-container>
+                        <input type="text" mdInput formControlName="filterValue" [mdAutocomplete]="filterVal">
+                    </md-input-container>
+                </span>
+        </span>
+        <button type="button" md-icon-button color="primary" *ngIf="itemSelected" (click)="showMore()">{{btnValue}}</button>
+    </md-card-content>
+
+    <!-- Autocomplete suggestion placeholders -->
+    <md-autocomplete #eventOpt="mdAutocomplete">
+        <md-option *ngFor="let option of filteredOptions | async" [value]="option" (onSelectionChange)="callMe($event)"> {{option}} </md-option>
     </md-autocomplete>
-    <button md-button color="warn" type="button" (click)="removeStep(i)">Delete</button>
+    <md-autocomplete #propOpt="mdAutocomplete">
+        <md-option *ngFor="let prop of filteredProps | async" [value]="prop" (onSelectionChange)="onPropSelected(item)">{{prop}}</md-option>
+    </md-autocomplete>
+    <md-autocomplete #filterVal="mdAutocomplete">
+        <md-option *ngFor="let filter of filteredFilters | async" [value]="filter">{{filter}}</md-option>
+    </md-autocomplete>
 </div>

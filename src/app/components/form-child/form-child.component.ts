@@ -5,15 +5,6 @@ import { Observable } from 'rxjs/Observable';
 
 import { FormBuilder, FormGroup, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-
-/*export class User {
-  name: string;
-
-  constructor(name: string) {
-    this.name = name;
-  }
-}*/
-
 /*export class Step {
   name: string;
   event: string;
@@ -39,119 +30,81 @@ import { FormBuilder, FormGroup, ControlValueAccessor, NG_VALUE_ACCESSOR } from 
 export class FormChildComponent implements OnInit, ControlValueAccessor {
 
 @Input() childGroup: FormGroup;
-  /*myControl = new FormControl();
-  myControl2 = new FormControl();
-
-  options = [
-    'One',
-    'Two',
-    'Three',
-    'Four',
-    'Five'
-  ];
+ 
+  options = ['One','Two','Three','Four','Five'];
   filteredOptions: Observable<string[]>;
-  
-  users = [
-    new User('Mary'),
-    new User('Shelley'),
-    new User('Igor')
-  ];
-  filteredUsers: Observable<User[]>;*/
+  props = ['Six', 'Seven', 'Eight', 'Nine', 'Ten'];
+  filteredProps: Observable<string[]>;
+  queryParams = ['equals', 'does not equal', 'contains', 'does not contain', 'is set', 'is not set'];
+  filters = ['Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen'];
+  filteredFilters: Observable<string[]>;
+
+  itemSelected = false;
+  viewProperties = false;
+  btnValue = '>';
+  propertySelected = false;
 
   constructor(private fb: FormBuilder ) {
-
     this.childGroup = fb.group({
-      name: '',
-      event: ''
+      name: fb.control(''),
+      event: fb.control('')
     });
-   }
+  }
 
    writeValue(value: any) {
-    console.log('Child - Write Value');
     if(value) {
       this.childGroup.setValue(value);
     }
   }
 
-  registerOnChange(fn: (value: any) => {} ) {
-    console.log('Child - registerOnChange');
+  registerOnChange(fn: (value: any) => void ) {
     this.childGroup.valueChanges.subscribe(fn);
   }
 
   registerOnTouched() {}
 
-   /*registerOnChange(fn) {
-    console.log('Child - RegisterOnChange');
-    this.propagateChange = fn;
-  }
-
-  propagateChange = (_: any) => {};*/
-
-  /*createFormGroup(): void {
-    this.childGroup = this.fb.group({
-      name: new FormControl(),
-      event: new FormControl()
-    });
-  }
-*/
- /* setSteps(steps: Step[]): void {
-    const stepFormGroup = steps.map(step => this.fb.group(step));
-    const stepFormArray = this.fb.array(stepFormGroup);
-    this.childForm.setControl('steps', stepFormArray);
-  }*/
-
-
-  
-
- /* registerOnChange(fn: (value: any) => void) {
-    console.log('Child -Register on changes');
-    this.childGroup.valueChanges.subscribe(fn);
-  }*/
-
- /* registerOnChange(fn) {
-    this.propagateChange = fn;
-  }
-
-  propagateChange = (_: any) => {};
-
-  registerOnTouched() {}*/
-
-
-/*  get name() {
-    console.log('Child: get name()');
-    return this.childGroup.get('name');
-  }
-
-  set name(value) {
-    console.log('Child: set name()');
-    this.childGroup.patchValue({name: value});
-    this.propagateChange(this.childGroup);
-  }
-
-  get event() {
-    console.log('Child: get event()');
-    return this.childGroup.get('event');
-  }
-
-  set event(value) {
-    console.log('Child: set event()');
-    this.childGroup.patchValue({event: value});
-    this.propagateChange(this.childGroup);
-  }*/
-
   ngOnInit() {
+    this.filteredOptions = this.childGroup.get('event').valueChanges
+      .startWith(null)
+      .map(val => val ? this.filter(val) : this.options.slice() );
   }
 
-  /*filter(val: string): string[] {
-    return this.options.filter(option => new RegExp(`${val}`, 'gi').test(option));
+  filter(val: string): string[] {
+   return this.options.filter(option => new RegExp(`${val}`, 'gi').test(option));
   }
 
-  filterUsers(name: string): User[] {
-    return this.users.filter(option => new RegExp(`^${name}`, 'gi').test(option.name));
+  callMe(evt) {
+    this.itemSelected = true;
   }
 
-  displayFn(user: User): string {
-    return user ? user.name : '';
-  }*/
+  onPropSelected(evt) {
+    console.log('Hallo!');
+    this.propertySelected = true;
+    if(this.viewProperties) {
+      this.childGroup.addControl('actions', this.fb.control(''));
+      this.childGroup.addControl('filterValue', this.fb.control(''));
+      this.filteredFilters = this.childGroup.get('filterValue').valueChanges
+        .startWith(null)
+        .map( val => val ? this.filter(val) : this.filters.slice());
+    } 
+  }
+
+  showMore() {
+    this.viewProperties = !this.viewProperties;
+    this.btnValue = this.viewProperties ? '<' : '>';
+    if(this.viewProperties) {
+      this.childGroup.addControl('properties', this.fb.control(''));
+      this.filteredProps = this.childGroup.get('properties').valueChanges
+        .startWith(null)
+        .map(val => val ? this.filter(val) : this.props.slice());
+    } else {
+      this.filteredFilters = null;
+      this.filteredProps = null;
+      this.propertySelected = false;
+      this.childGroup.removeControl('filterValue');
+      this.childGroup.removeControl('actions');
+      this.childGroup.removeControl('properties');
+    }
+  }
 
 }
