@@ -11,14 +11,14 @@
         </md-input-container>
         <span *ngIf="viewProperties">
                 <md-input-container>
-                    <input type="text" mdInput formControlName="properties" placeholder="Properties" [mdAutocomplete]="propOpt">
+                    <input type="text" mdInput formControlName="property" placeholder="Properties" [mdAutocomplete]="propOpt">
                 </md-input-container>
                 <span *ngIf="propertySelected">
-                    <md-select formControlName="actions" placeholder="" floatPlaceholder="never">
+                    <md-select formControlName="constraint" placeholder="" floatPlaceholder="never">
                         <md-option *ngFor="let query of queryParams" [value]="query">{{query}}</md-option>
                     </md-select>
                     <md-input-container>
-                        <input type="text" mdInput formControlName="filterValue" [mdAutocomplete]="filterVal">
+                        <input type="text" mdInput formControlName="filter" [mdAutocomplete]="filterVal">
                     </md-input-container>
                 </span>
         </span>

@@ -2,11 +2,15 @@
     <button md-raised-button color="primary" type="button" (click)="addStep()">Add Step</button>
     <button md-raised-button color="warn" type="reset" (click)="revert()" [disabled]="funnelForm.pristine">Revert</button>
     <br /> <br/>
+    <md-input-container>
+        <input type="text" mdInput formControlName="funnelName" placeholder="Funnel Name">
+    </md-input-container>
+
     <div formArrayName="steps">
         <div *ngFor="let step of steps.controls; let i=index">
             <!--<h4>Step #{{i + 1}}</h4>-->
             <md-card>
-                <app-form-child [formControlName]="i"></app-form-child>
+                <app-form-child [formControlName]="i" [step]="funnel.steps[i]"></app-form-child>
                 <md-card-actions>
                     <button md-button color="warn" type="button" (click)="removeStep(i)">Delete</button>
                 </md-card-actions>
@@ -18,4 +22,4 @@
 </form>
 
 <p>funnelForm value: {{ funnelForm.value | json }}</p>
-<p> Step Change Log: {{ stepChangeLog | json}} </p>
+<!--<p> Step Change Log: {{ stepChangeLog | json}} </p>-->

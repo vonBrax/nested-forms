@@ -1,16 +1,7 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, FormControl, AbstractControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
-
-export class Step {
-  name: string;
-  event: string;
-
-  constructor(name?, event?) {
-    this.name = name || '';
-    this.event = event || '';
-  }
-}
+import { Funnel, Step } from '../../data-model';
 
 @Component({
   selector: 'app-form-parent',
@@ -18,32 +9,41 @@ export class Step {
   styleUrls: ['./form-parent.component.css']
 })
 export class FormParentComponent implements OnInit, OnChanges {
- //stepsCounter: number[] = [0];
  funnelForm: FormGroup;
- @Input() funnel: any;
+ @Input() funnel: Funnel;
 
   stepChangeLog = [];
 
   constructor( private fb: FormBuilder ) {
+    this.funnel = this.funnel || new Funnel();
     this.createForm();
-    this.logStepChanges();
+    this.funnel.steps.forEach(() => this.addStep());
+    //this.addStep();
+    //this.logStepChanges();
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    console.log('Parent - onInit()');
+   }
 
   createForm(): void {
+    console.log('Parent - createForm()');
     this.funnelForm = this.fb.group({
+      funnelName: this.fb.control(''),
       steps: this.fb.array([])
     });
   }
 
   ngOnChanges() {
-    console.log('Parent - ngOnChanges');
-    this.setSteps(this.funnel.step);
+    console.log('Parent - ngOnChanges()');
+    this.funnelForm.reset({
+      funnelName: this.funnel.name,
+      steps: this.funnel.steps
+    });
+    //this.setSteps(this.funnel.steps); //TODO: Check if it makes sense!*/
   }
 
   get steps(): FormArray {
-    //console.log('Parent: get steps()');
     return this.funnelForm.get('steps') as FormArray;
   }
 
@@ -55,22 +55,51 @@ export class FormParentComponent implements OnInit, OnChanges {
   }
 
   addStep(): void {
-    //this.stepsCounter.push(this.stepsCounter.length);
-    //this.steps.push(this.fb.group(new Step('Step ' + (this.steps.length+1) )));
-    //this.steps.push(this.fb.group({name: '', event: ''}));
-    this.steps.push( this.fb.control({name: '', event: ''}) );
+   this.steps.push( this.fb.control({name: '', event: ''}) );
   }
 
   removeStep(index: number): void {
-    //this.stepsCounter.splice(index,1);
     this.steps.removeAt(index);
+    this.funnel.steps.splice(index,1);
+  }
+
+  removeAllSteps(): void {
+    for(let i = 0; i < this.steps.length; i++ ) {
+      this.steps.removeAt(i);
+    }
   }
 
   onSubmit(): void {
+    console.log('Parent: onSubmit()');
+    this.funnel = this.prepareSaveFunnel();
+    console.log(this.funnel);
+    //this.funnelService.updateFunnel(this.funnel).subscribe(/*Error Handling in here*/);
     this.ngOnChanges();
   }
 
+  // TODO's: create a Funnel class and set return value type
+  // of the below function to Funnel
+  prepareSaveFunnel(): Funnel {
+    const formModel = this.funnelForm.value;
+
+    // Deep copy of form model steps
+    const stepsDeepCopy: Step[] = formModel.steps.map(
+      (steps: Step) => Object.assign({}, steps)
+    );
+
+    // Return new "Funnel" object containing a combination of original funnel value(s)
+    // and deep copies of changed form model values.
+    // TODO: set const tipe to be "Funnel"
+    const saveFunnel: Funnel = {
+      //_id: this.funnel.id,
+      name: formModel.funnelName as string,
+      steps: stepsDeepCopy 
+    };
+    return saveFunnel;
+  }
+
   revert(): void {
+    console.log('Parent: revert()');
     this.ngOnChanges();
   }
 
